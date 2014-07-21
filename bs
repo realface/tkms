@@ -1,0 +1,49 @@
+#!/usr/bin/env escript
+%% -*- mode: erlang;erlang-indent-level: 4;indent-tabs-mode: nil -*-
+%% ex: ft=erlang ts=4 sw=4 et
+
+main(Args) ->
+    [Opt1|_] = Args,
+    case Opt1 of
+        "-a" ->
+            io:format("-a");
+        "-b" ->
+            io:format("-b");
+        "-httpc" ->
+            run(httpc);
+        "-httpd" ->
+            run(httpd);
+        _ ->
+            damn()
+    end.
+
+%% exp.
+damn() ->
+    io:format("not supportted option").
+
+run(httpd) ->
+    ok = inets:start(),
+    {ok, Pid} = inets:start(httpd, [{port, 8080},
+                                    {server_name,"httpd_test"},
+                                    {server_root, "/Users/cyberghost/Documents"},
+                                    {document_root,"/Users/cyberghost/Documents/htdocs"},
+                                    {bind_address, any}]);
+run(httpc) ->
+    ok = inets:start(),
+    %% httpc:set_options([]),
+    {ok, {ResultInfo, Header, Body}} = httpc:request(get, {"http://www.baidu.com", []}, [], []),
+    %% httpc:request("http://www.baidu.com"),
+    file:write_file("b1.html", Body).
+
+    %% 异步的请求
+    %% {ok, RequestId} =
+    %%     httpc:request(get, {"http://www.erlang.org", []}, [], [{sync, false}]).
+
+loop() ->
+    receive
+        {http, {RequestId, Result}} ->
+            ok
+    after 500 ->
+            error
+    end.
+
