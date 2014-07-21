@@ -1,0 +1,11 @@
+io:format(".erlang file loaded from current directory~n").
+
+%% code
+%% Set paths to fix all dependencies
+Home = os:getenv("HOME").
+Dir = Home ++ "/erlang_imports/deps",
+{ok, L} = file:list_dir(Dir).
+lists:foreach(fun(I) ->
+                      Path = Dir ++ "/" ++ I ++ "/ebin",
+                      code:add_path(Path)
+              end, L).
