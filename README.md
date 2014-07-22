@@ -33,7 +33,25 @@ OTP Principle 中对 application 进行了相关的规定。
 
 那么，还有没有其他的运行方式呢？是否能把 application 打包成独立运行的
 程序呢？
+
 这里，就涉及到了 `release` 的概念
+mkdir rel && cd rel  && rebar create-node nodeid=tk1
+
+结果：
+    ==> rel (create-node)
+    Writing reltool.config
+    Writing files/erl
+    Writing files/nodetool
+    Writing files/tk1
+    Writing files/sys.config
+    Writing files/vm.args
+    Writing files/tk1.cmd
+    Writing files/start_erl.cmd
+    Writing files/install_upgrade.escript
+
+通过 rebar 提供的 release 功能，创建了 release 需要使用的一些文件
+
+
 
 ## rebar
   rebar 是一个工具，类似 ruby 的 `bundler` 或者 `rails`命令。根据
